@@ -8,16 +8,11 @@ using System.Windows.Forms;
 
 namespace AtelierPro1.Vue
 {
-    public partial class FrmAuthentification : Form
+    public partial class FrmPersonnel : Form
     {
-        public FrmAuthentification()
+        public FrmPersonnel()
         {
             InitializeComponent();
-        }
-
-        private void FrmAuthentification_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }
