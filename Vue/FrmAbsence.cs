@@ -8,16 +8,11 @@ using System.Windows.Forms;
 
 namespace AtelierPro1.Vue
 {
-    public partial class FrmAuthentification : Form
+    public partial class FrmAbsence : Form
     {
-        public FrmAuthentification()
+        public FrmAbsence()
         {
             InitializeComponent();
-        }
-
-        private void FrmAuthentification_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }
