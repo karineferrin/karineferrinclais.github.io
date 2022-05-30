@@ -7,10 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Modele\" />
-    <Folder Include="Controle\" />
-    <Folder Include="dal\" />
-    <Folder Include="Connexion\" />
+    <PackageReference Include="MySql.Data" Version="8.0.29" />
   </ItemGroup>
 
 </Project>
