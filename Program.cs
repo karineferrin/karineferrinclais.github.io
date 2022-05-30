@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AtelierPro1.Controleur;
 
 namespace AtelierPro1
 {
@@ -17,7 +18,8 @@ namespace AtelierPro1
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            //            Application.Run(new vue.Form1());
+            new controle();
         }
     }
 }

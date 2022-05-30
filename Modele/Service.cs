@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AtelierPro1.Modele
 {
-    class Service
+    public class Service
     {
         private int idservice;
         private string nom;
@@ -29,7 +29,7 @@ namespace AtelierPro1.Modele
         /// <returns>nom du service</returns>
         public override string ToString()
         {
-            return this.nom;
+            return this.nom + this.idservice;
         }
 
     }

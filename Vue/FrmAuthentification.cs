@@ -10,7 +10,7 @@ namespace AtelierPro1.Vue
 {
     public partial class FrmAuthentification : Form
     {
-        public FrmAuthentification()
+        public FrmAuthentification(Controleur.controle controle)
         {
             InitializeComponent();
         }

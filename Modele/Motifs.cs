@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AtelierPro1.Modele
 {
-    class Motifs
+    public class Motifs
     {
         private int idmotif;
         private string motif;

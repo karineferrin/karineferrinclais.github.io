@@ -85,7 +85,7 @@ namespace AtelierPro1.connexion
         /// Exécute une requête type "select" et valorise le curseur
         /// </summary>
         /// <param name="stringQuery">requête select</param>
-        public void ReqSelect(string stringQuery)
+        public void ReqSelect(string stringQuery, Dictionary<string, object> parameters)
         {
             try
             {

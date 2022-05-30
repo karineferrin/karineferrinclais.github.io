@@ -10,7 +10,7 @@ namespace AtelierPro1.Vue
 {
     public partial class FrmPersonnel : Form
     {
-        public FrmPersonnel()
+        public FrmPersonnel(Controleur.controle controle)
         {
             InitializeComponent();
         }

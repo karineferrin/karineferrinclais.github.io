@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AtelierPro1.Modele
 {
-    class Absence
+    public class Absence
     {
         private int idpersonnel;
         private int idmotif;
