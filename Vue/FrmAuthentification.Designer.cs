@@ -65,6 +65,7 @@ namespace AtelierPro1.Vue
             // 
             this.txbPwd.Location = new System.Drawing.Point(163, 78);
             this.txbPwd.Name = "txbPwd";
+            this.txbPwd.PasswordChar = '*';
             this.txbPwd.Size = new System.Drawing.Size(162, 27);
             this.txbPwd.TabIndex = 3;
             // 
@@ -76,6 +77,7 @@ namespace AtelierPro1.Vue
             this.btnSeConnecter.TabIndex = 4;
             this.btnSeConnecter.Text = "Se connecter";
             this.btnSeConnecter.UseVisualStyleBackColor = true;
+            this.btnSeConnecter.Click += new System.EventHandler(this.BtnSeConnecter_Click);
             // 
             // FrmAuthentification
             // 
@@ -87,9 +89,10 @@ namespace AtelierPro1.Vue
             this.Controls.Add(this.txbIdentifiant);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
+            this.Location = new System.Drawing.Point(200, 200);
             this.Name = "FrmAuthentification";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FrmAuthentification";
-            this.Load += new System.EventHandler(this.FrmAuthentification_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

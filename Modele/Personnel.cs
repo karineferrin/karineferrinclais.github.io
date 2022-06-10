@@ -12,13 +12,15 @@ namespace AtelierPro1.Modele
             private string tel;
             private string mail;
             private int idservice;
+            private string service;
 
             public int Idpersonnel { get => idpersonnel; }
-            public string Nom { get => nom; }
+            public string Nom { get => nom;  }
             public string Prenom { get => prenom; }
             public string Tel { get => tel; }
             public string Mail { get => mail; }
             public int Idservice { get => idservice; }
+            public string Service { get => service; }
 
             /// <summary>
             /// Constructeur : valorise les propriétés
@@ -29,7 +31,8 @@ namespace AtelierPro1.Modele
             /// <param name="tel"></param>
             /// <param name="mail"></param>
             /// <param name="idservice"></param>
-            public Personnel(int idpersonnel, string nom, string prenom, string tel, string mail, int idservice)
+            /// <param name="service"></param>
+            public Personnel(int idpersonnel, string nom, string prenom, string tel, string mail, int idservice, string service)
             {
                 this.idpersonnel = idpersonnel;
                 this.nom = nom;
@@ -37,6 +40,7 @@ namespace AtelierPro1.Modele
                 this.tel = tel;
                 this.mail = mail;
                 this.idservice = idservice;
+                this.service = service;
             }
             /// <summary>
             /// Définit l'information à afficher (le nom et le prenom)

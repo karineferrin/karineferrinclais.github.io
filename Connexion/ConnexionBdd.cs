@@ -3,17 +3,17 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace AtelierPro1.connexion
+namespace AtelierPro1.Connexion
 {
     /// <summary>
     /// Connexion à la base de données et exécution des requêtes
     /// </summary>
-    public class ConnexionBDD
+    public class ConnexionBdd
     {
         /// <summary>
         /// Unique instance de la classe
         /// </summary>
-        private static ConnexionBDD instance = null;
+        private static ConnexionBdd instance = null;
         /// <summary>
         /// objet de connexion à la BDD à partir d'une chaîne de connexion
         /// </summary>
@@ -31,7 +31,7 @@ namespace AtelierPro1.connexion
         /// Constructeur privé pour créer la connexion à la BDD et l'ouvrir
         /// </summary>
         /// <param name="stringConnect">chaine de connexion</param>
-        private ConnexionBDD(string stringConnect)
+        private ConnexionBdd(string stringConnect)
         {
             try
             {
@@ -50,11 +50,11 @@ namespace AtelierPro1.connexion
         /// </summary>
         /// <param name="stringConnect">chaine de connexion</param>
         /// <returns>instance unique de la classe</returns>
-        public static ConnexionBDD GetInstance(string stringConnect)
+        public static ConnexionBdd GetInstance(string stringConnect)
         {
             if (instance is null)
             {
-                instance = new ConnexionBDD(stringConnect);
+                instance = new ConnexionBdd(stringConnect);
             }
             return instance;
         }
@@ -68,9 +68,12 @@ namespace AtelierPro1.connexion
             try
             {
                 command = new MySqlCommand(stringQuery, connection);
-                foreach (KeyValuePair<string, object> parameter in parameters)
+                if (!(parameters is null))
                 {
-                    command.Parameters.Add(new MySqlParameter(parameter.Key, parameter.Value));
+                    foreach (KeyValuePair<string, object> parameter in parameters)
+                    {
+                        command.Parameters.Add(new MySqlParameter(parameter.Key, parameter.Value));
+                    }
                 }
                 command.Prepare();
                 command.ExecuteNonQuery();
@@ -90,6 +93,14 @@ namespace AtelierPro1.connexion
             try
             {
                 command = new MySqlCommand(stringQuery, connection);
+                if (!(parameters is null))
+                {
+                    foreach (KeyValuePair<string, object> parameter in parameters)
+                    {
+                        command.Parameters.Add(new MySqlParameter(parameter.Key, parameter.Value));
+                    }
+                }
+                command.Prepare();
                 reader = command.ExecuteReader();
             }
             catch (Exception e)

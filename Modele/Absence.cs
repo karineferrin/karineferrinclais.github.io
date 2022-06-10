@@ -8,12 +8,14 @@ namespace AtelierPro1.Modele
     {
         private int idpersonnel;
         private int idmotif;
-        private DateTime datedebut;
-        private DateTime datefin;
+        private string motif;
+        private object datedebut;
+        private object datefin;
 
-        public DateTime Datedebut { get => datedebut; }
-        public DateTime Datefin { get => datefin; }
+        public object Datedebut { get => datedebut; }
+        public object Datefin { get => datefin; }
         public int Idpersonnel { get => idpersonnel; }
+        public string Motif { get => motif; }
         public int Idmotif { get => idmotif; }
 
         /// <summary>
@@ -22,12 +24,13 @@ namespace AtelierPro1.Modele
         /// <param name="datedebut"></param>
         /// <param name="datefin"></param>
         /// <param name="idpersonnel"></param>
-        /// <param name="idmotif"></param>
+        /// <param name="motif"></param>
 
-        public Absence(int idpersonnel, int idmotif, DateTime datedebut, DateTime datefin)
+        public Absence(int idpersonnel, object datedebut, object datefin, int idmotif, string motif)
         {
             this.idpersonnel = idpersonnel;
             this.idmotif = idmotif;
+            this.motif = motif;
             this.datedebut = datedebut;
             this.datefin = datefin;
         }

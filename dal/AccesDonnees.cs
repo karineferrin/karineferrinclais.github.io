@@ -1,4 +1,4 @@
-﻿using AtelierPro1.connexion;
+﻿using AtelierPro1.Connexion;
 using AtelierPro1.Modele;
 using System;
 using System.Collections.Generic;
@@ -10,9 +10,9 @@ namespace AtelierPro1.dal
     /// </summary>
     public class AccesDonnees
     {
-        private static string connectionString = "server=localhost;user id=atelierPro1;password=motdepasseuser;database=atelier2pro;SslMode=none";
+        private static string connectionString = "server=localhost;user id=root;database=atelier2pro;SslMode=none";
         /// <summary>
-        /// Controle si l'utilisateur a le droit de se connecter (login, pwd est  "responsable")
+        /// Controle si l'utilisateur a le droit de se connecter (login, pwd dans  "responsable")
         /// </summary>
         /// <param name="login"></param>
         /// <param name="pwd"></param>
@@ -20,11 +20,11 @@ namespace AtelierPro1.dal
         public static Boolean ControleAuthentification(string login, string pwd)
         {
             string req = "select * from responsable r ";
-            req += "where r.login=@login and r.pwd=SHA2(@pwd, 256);";
+            req += " where r.login=@login and r.pwd=SHA2(@pwd, 256);";
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("@login", login);
             parameters.Add("@pwd", pwd);
-            ConnexionBDD curs = ConnexionBDD.GetInstance(connectionString);
+            ConnexionBdd curs = ConnexionBdd.GetInstance(connectionString);
             curs.ReqSelect(req, parameters);
             if (curs.Read())
             {
@@ -44,14 +44,15 @@ namespace AtelierPro1.dal
         public static List<Personnel> GetLesPersonnels()
         {
             List<Personnel> lesPersonnels = new List<Personnel>();
-            string req = "select p.idpersonnel as idpersonnel, p.nom as nom, p.prenom as prenom, p.tel as tel, p.mail as mail, s.idservice as idservice";
-            req += "from personnel p join service s on (p.idservice = s.idservice) ";
-            req += "order by nom, prenom;";
-            ConnexionBDD curs = ConnexionBDD.GetInstance(connectionString);
+            string req = "select p.idpersonnel as idpersonnel, p.nom as nom, p.prenom as prenom, p.tel as tel, p.mail as mail, s.idservice as idservice, s.nom as service";
+            req += " from personnel p join service s on (p.idservice = s.idservice) ";
+            req += " order by p.nom, p.prenom;";
+            ConnexionBdd curs = ConnexionBdd.GetInstance(connectionString);
             curs.ReqSelect(req, null);
             while (curs.Read())
             {
-                Personnel personnel = new Personnel((int)curs.Field("idpersonnel"), (string)curs.Field("nom"), (string)curs.Field("prenom"), (string)curs.Field("tel"), (string)curs.Field("mail"), (int)curs.Field("idservice"));
+                Personnel personnel = new Personnel((int)curs.Field("idpersonnel"), (string)curs.Field("nom"), (string)curs.Field("prenom"), (string)curs.Field("tel"), (string)curs.Field("mail"), (int)curs.Field("idservice"), (string)curs.Field("service"));
+                
                 lesPersonnels.Add(personnel);
             }
             curs.Close();
@@ -66,7 +67,7 @@ namespace AtelierPro1.dal
         {
             List<Service> lesServices = new List<Service>();
             string req = "select * from service order by nom;";
-            ConnexionBDD curs = ConnexionBDD.GetInstance(connectionString);
+            ConnexionBdd curs = ConnexionBdd.GetInstance(connectionString);
             curs.ReqSelect(req, null);
             while (curs.Read())
             {
@@ -86,7 +87,7 @@ namespace AtelierPro1.dal
             string req = "delete from personnel where idpersonnel = @idpersonnel;";
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("@idpersonnel", personnel.Idpersonnel);
-            ConnexionBDD conn = ConnexionBDD.GetInstance(connectionString);
+            ConnexionBdd conn = ConnexionBdd.GetInstance(connectionString);
             conn.ReqUpdate(req, parameters);
         }
 
@@ -96,15 +97,16 @@ namespace AtelierPro1.dal
         /// <param name="personnel"></param>
         public static void AddPersonnel(Personnel personnel)
         {
-            string req = "insert into personnel(nom, prenom, tel, mail,  idservice) ";
-            req += "values (@nom, @prenom, @tel, @mail, @idprofil);";
+            string req = "insert into personnel(nom, prenom, tel, mail, idservice, service) ";
+            req += " values (@nom, @prenom, @tel, @mail, @idservice, @service);";
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("@nom", personnel.Nom);
             parameters.Add("@prenom", personnel.Prenom);
             parameters.Add("@tel", personnel.Tel);
             parameters.Add("@mail", personnel.Mail);
-            parameters.Add("@idprofil", personnel.Idservice);
-            ConnexionBDD conn = ConnexionBDD.GetInstance(connectionString);
+            parameters.Add("@idservice", personnel.Idservice);
+            parameters.Add("@service", personnel.Service);
+            ConnexionBdd conn = ConnexionBdd.GetInstance(connectionString);
             conn.ReqUpdate(req, parameters);
         }
 
@@ -114,33 +116,38 @@ namespace AtelierPro1.dal
         /// <param name="personnel"></param>
         public static void UpdatePersonnel(Personnel personnel)
         {
-            string req = "update personnel set nom = @nom, prenom = @prenom, tel = @tel, mail = @mail, idservice = @idservice ";
-            req += "where idpersonnel = @idpersonnel;";
+            string req = "update personnel set nom = @nom, prenom = @prenom, tel = @tel, mail = @mail, idservice = @idservice, service = @service";
+            req += " where idpersonnel = @idpersonnel;";
             Dictionary<string, object> parameters = new Dictionary<string, object>();
-            parameters.Add("@idDeveloppeur", personnel.Idpersonnel);
+            parameters.Add("@idpersonnel", personnel.Idpersonnel);
             parameters.Add("@nom", personnel.Nom);
             parameters.Add("@prenom", personnel.Prenom);
             parameters.Add("@tel", personnel.Tel);
             parameters.Add("@mail", personnel.Mail);
-            parameters.Add("idprofil", personnel.Idservice);
-            ConnexionBDD conn = ConnexionBDD.GetInstance(connectionString);
+            parameters.Add("@idservice", personnel.Idservice);
+            parameters.Add("@service", personnel.Service);
+            ConnexionBdd conn = ConnexionBdd.GetInstance(connectionString);
             conn.ReqUpdate(req, parameters);
         }
         /// <summary>
         /// Récupère et retourne les absences provenant de la BDD
         /// </summary>
         /// <returns>liste des absences</returns>
-        public static List<Absence> GetLesAbsences()
+        public static List<Absence> GetLesAbsences(int idpersonnelSelect)
         {
+
             List<Absence> lesAbsences = new List<Absence>();
-            string req = "select p.idpersonnel as idpersonnel, p.nom as nom, p.prenom as prenom, m.idservice as idmotif, m.nom as motif, a.datedebut as date début, a.datefin as date fin ";
-            req += "from personnel p join absence a on (p.idpersonnel = a.idpersonnel) join motif m on (a.idmotif = m.idmotif)";
-            req += "order by nom, prenom, datedebut;";
-            ConnexionBDD curs = ConnexionBDD.GetInstance(connectionString);
-            curs.ReqSelect(req, null);
+            string req = "select p.idpersonnel as idpersonnel, a.datedebut as datedebut, a.datefin as datefin, m.idmotif as idmotif, m.motif as motif ";
+            req += " from personnel p join absence a on (p.idpersonnel = a.idpersonnel) join motif m on (a.idmotif = m.idmotif)";
+            req += " where p.idpersonnel = @idpersonnelSelect ";
+            req += " order by datedebut DESC";
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@idpersonnelSelect", idpersonnelSelect);
+            ConnexionBdd curs = ConnexionBdd.GetInstance(connectionString);
+            curs.ReqSelect(req, parameters);
             while (curs.Read())
             {
-                Absence absence = new Absence((int)curs.Field("idpersonnel"),  (int)curs.Field("idmotif"), (DateTime)curs.Field("datedebut"), (DateTime)curs.Field("datefin"));
+                Absence absence = new Absence((int)curs.Field("idpersonnel"), (object)curs.Field("datedebut"), (object)curs.Field("datefin"), (int)curs.Field("idmotif"), (string)curs.Field("motif"));
                 lesAbsences.Add(absence);
             }
             curs.Close();
@@ -155,31 +162,42 @@ namespace AtelierPro1.dal
         {
             List<Motifs> lesMotifs = new List<Motifs>();
             string req = "select * from motif order by motif;";
-            ConnexionBDD curs = ConnexionBDD.GetInstance(connectionString);
+            ConnexionBdd curs = ConnexionBdd.GetInstance(connectionString);
             curs.ReqSelect(req, null);
             while (curs.Read())
             {
-                Motifs motif = new Motifs((int)curs.Field("idservice"), (string)curs.Field("nom"));
+                Motifs motif = new Motifs((int)curs.Field("idmotif"), (string)curs.Field("motif"));
                 lesMotifs.Add(motif);
             }
             curs.Close();
             return lesMotifs;
         }
-
+        /// <summary>
+        /// Suppression d'une absence
+        /// </summary>
+        /// <param name="absence">objet personnel à supprimer</param>
+        public static void DelAbsence(Absence absence, int idpersonnelSelect)
+        {
+            string req = "delete from absence where datedebut = @datedebut;";
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@datedebut", absence.Datedebut);
+            ConnexionBdd conn = ConnexionBdd.GetInstance(connectionString);
+            conn.ReqUpdate(req, parameters);
+        }
         /// <summary>
         /// Ajoute une absence
         /// </summary>
         /// <param name="absence"></param>
-        public static void AddAbsence (Absence absence)
+        public static void AddAbsence (Absence absence, int idpersonnelSelect)
         {
-            string req = "insert into absence(idpersonnel, idmotif, datedebut, datefin) ";
-            req += "values (@idpersonnel, @idmotif, @datedebut, @datefin);";
+            string req = "insert into absence(idpersonnel, datedebut, datefin, idmotif) ";
+            req += " values (@idpersonnelSelect, @datedebut, @datefin, @idmotif)";
             Dictionary<string, object> parameters = new Dictionary<string, object>();
-            parameters.Add("@idpersonnel", absence.Idpersonnel);
-            parameters.Add("@idmotif", absence.Idmotif );
+            parameters.Add("@idpersonnelSelect", absence.Idpersonnel);
             parameters.Add("@datedebut", absence.Datedebut);
             parameters.Add("@datefin", absence.Datefin);
-            ConnexionBDD conn = ConnexionBDD.GetInstance(connectionString);
+            parameters.Add("@idmotif", absence.Idmotif);
+            ConnexionBdd conn = ConnexionBdd.GetInstance(connectionString);
             conn.ReqUpdate(req, parameters);
         }
 
@@ -187,16 +205,18 @@ namespace AtelierPro1.dal
         /// Modification d'un membre du personnel
         /// </summary>
         /// <param name="personnel"></param>
-        public static void UpdateAbsence(Absence absence)
+        public static void UpdateAbsence(Absence absence, int idpersonnelSelect, DateTime dateSelect)
         {
-            string req = "update personnel set idpersonnel = @idepersonnel, idmotif = @idmotif, datedebut = @datedebut, datefin = @datefin";
-            req += "where idpersonnel = @idpersonnel;";
+            string req = "update absence set datedebut = @datedebut, datefin = @datefin, idmotif = @idmotif";
+            req += " where idpersonnel = @idpersonnelSelect && datedebut = @dateSelect";
             Dictionary<string, object> parameters = new Dictionary<string, object>();
-            parameters.Add("@idpersonnel", absence.Idpersonnel);
-            parameters.Add("@idmotif", absence.Idmotif);
+            parameters.Add("@dateSelect", dateSelect);
+            parameters.Add("@idpersonnelSelect", absence.Idpersonnel);
             parameters.Add("@datedebut", absence.Datedebut);
             parameters.Add("@datefin", absence.Datefin);
-            ConnexionBDD conn = ConnexionBDD.GetInstance(connectionString);
+            parameters.Add("@idmotif", absence.Idmotif);
+  
+            ConnexionBdd conn = ConnexionBdd.GetInstance(connectionString);
             conn.ReqUpdate(req, parameters);
         }
     }

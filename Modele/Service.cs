@@ -29,7 +29,7 @@ namespace AtelierPro1.Modele
         /// <returns>nom du service</returns>
         public override string ToString()
         {
-            return this.nom + this.idservice;
+            return this.nom;
         }
 
     }

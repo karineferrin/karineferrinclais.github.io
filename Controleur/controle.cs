@@ -6,17 +6,22 @@ using AtelierPro1.Vue;
 
 namespace AtelierPro1.Controleur
 {
-    public class controle
+    /// <summary>
+    /// Gère les interractions entre la vue et le modèle
+    /// </summary>
+    public class Controle
     {
         /// <summary>
         /// fenêtre d'authentification
         /// </summary>
         private FrmAuthentification frmAuthentification;
+        private frmPersonnel frmPersonnel;
+        
 
         /// <summary>
         /// Ouverture de la fenêtre
         /// </summary>
-        public controle()
+        public Controle()
         {
             frmAuthentification = new FrmAuthentification(this);
             frmAuthentification.ShowDialog();
@@ -34,22 +39,29 @@ namespace AtelierPro1.Controleur
             if (AccesDonnees.ControleAuthentification(login, pwd))
             {
                 frmAuthentification.Hide();
-                new FrmPersonnel(this).ShowDialog();
+                new frmPersonnel(this).ShowDialog();
                 return true;
             }
             else
             {
                 return false;
+
             }
         }
-        /// <summary>
-        /// Récupère et retourne les infos des membres du personnel provenant de la BDD
-        /// </summary>
-        /// <returns>liste des développeurs</returns>
-        public List<Personnel> GetPersonnel()
+        public void GererAbsence(int idpersonnelSelect, string nom, string prenom)
         {
-            return AccesDonnees.GetLesPersonnels();
+            new FrmAbsence(this, idpersonnelSelect, nom, prenom).Show();
+          
         }
+
+            /// <summary>
+            /// Récupère et retourne les infos des membres du personnel provenant de la BDD
+            /// </summary>
+            /// <returns>liste des développeurs</returns>
+            public List<Personnel> GetLesPersonnels()
+            {
+                return AccesDonnees.GetLesPersonnels();
+            }
 
         /// <summary>
         /// Récupère et retourne les infos des services provenant de la BDD
@@ -91,9 +103,10 @@ namespace AtelierPro1.Controleur
         /// Récupère et retourne les infos sur les absences provenant de la BDD
         /// </summary>
         /// <returns>liste des développeurs</returns>
-        public List<Absence> GetAbsence()
+        public List<Absence> GetLesAbsences(int idpersonnelSelect)
         {
-            return AccesDonnees.GetLesAbsences();
+            
+            return AccesDonnees.GetLesAbsences(idpersonnelSelect);
         }
 
         /// <summary>
@@ -105,25 +118,31 @@ namespace AtelierPro1.Controleur
             return AccesDonnees.GetLesMotifs();
         }
 
-
+        /// <summary>
+        /// Demande de suppression d'une absence
+        /// </summary>
+        /// <param name="absencel">objet developpeur à supprimer</param>
+        public void DelAbsence(Absence absence, int idpersonnelSelect)
+        {
+            AccesDonnees.DelAbsence(absence, idpersonnelSelect);
+        }
         /// <summary>
         /// Demande d'ajout d'une absence
         /// </summary>
         /// <param name="absence"></param>
-        public void AddAbsence(Absence absence)
+        public void AddAbsence(Absence absence, int idpersonnelSelect)
         {
-            AccesDonnees.AddAbsence(absence);
+            AccesDonnees.AddAbsence(absence, idpersonnelSelect);
         }
 
         /// <summary>
-        /// Demande de modification d'un membre du personnel
+        /// Demande de modification d'une absence
         /// </summary>
         /// <param name="personnel"></param>
-        public void UpdateAbsence(Absence absence)
+        public void UpdateAbsence(Absence absence, int idpersonnelSelect, DateTime dateSelect)
         {
-            AccesDonnees.UpdateAbsence(absence);
+            AccesDonnees.UpdateAbsence(absence, idpersonnelSelect, dateSelect);
         }
-
 
     }
 }
